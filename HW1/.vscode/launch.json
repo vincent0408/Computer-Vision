@@ -1,0 +1,61 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [{
+            "name": "Eval1",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/part1/eval.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--threshold", "3.0",
+                "--image_path", "./testdata/1.png",
+                "--gt_path", "./testdata/1_gt.npy"
+            ],
+            "cwd": "${workspaceFolder}/part1/"
+        },
+        {
+            "name": "Main1",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/part1/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/part1/",
+            "args": [
+                "--threshold", "1.0",
+                "--image_path", "./testdata/2.png",
+            ],
+        },
+        {
+            "name": "Eval2",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/part2/eval.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--image_path", "./testdata/ex.png",
+                "--gt_bf_path", "./testdata/ex_gt_bf.png",
+                "--gt_jbf_path", "./testdata/ex_gt_jbf.png"
+            ],
+            "cwd": "${workspaceFolder}/part2/"
+        },
+        {
+            "name": "Main2",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/part2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/part2/",
+            "args": [
+                "--image_path", "./testdata/1.png",
+                "--setting_path", "./testdata/1_setting.txt",
+            ],
+        }
+    ],
+}
