@@ -17,6 +17,8 @@ def get_dataloader(dataset_dir, batch_size=1, split='test'):
             transforms.Resize((32,32)),
             ##### TODO: Data Augmentation Begin #####
             transforms.ColorJitter(brightness=(0.5,1.5),contrast=(1),saturation=(0.5,1.5),hue=(-0.1,0.1)),
+            transforms.RandomHorizontalFlip(0.5),
+            transforms.RandomVerticalFlip(0.5),
             ##### TODO: Data Augmentation End #####
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])

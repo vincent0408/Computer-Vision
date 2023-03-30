@@ -116,7 +116,7 @@ def build_vocabulary(img_paths, vocab_size):
     features = []
     for ip in img_paths:
         img = cv2.imread(ip, 0).astype(np.float64)
-        _, descriptors = dsift(img, step=[10, 10], fast=True)
+        _, descriptors = dsift(img, step=[3, 3], fast=True)
         #np.random.shuffle(np.array(descriptors))
         features.extend(descriptors)
     vocab = kmeans(np.array(features).astype(np.float64),vocab_size)
@@ -167,7 +167,7 @@ def get_bags_of_sifts(img_paths, vocab):
 
     for ip in img_paths:
         img = cv2.imread(ip, 0).astype(np.float64)
-        _, descriptors = dsift(img, step=[2, 2], fast=True)
+        _, descriptors = dsift(img, step=[1, 1], fast=True)
         dist = cdist(vocab, descriptors)
         hist, bins = np.histogram(np.argmin(dist, axis=0), bins=len(vocab))
         img_feats.append(hist / np.sum(hist))

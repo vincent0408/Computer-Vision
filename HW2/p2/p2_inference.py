@@ -4,7 +4,7 @@ import time
 import argparse
 
 import torch
-
+import numpy as np
 from model import MyNet, ResNet18
 from dataset import get_dataloader
 from utils import write_csv
@@ -57,7 +57,13 @@ def main():
         # You don't have to calculate accuracy and loss since you   #
         # don't have labels.                                        #
         #############################################################
-        
+        for batch, data in enumerate(test_loader):
+            # Data loading.
+            images= data['images'].to(device) # (batch_size, 3, 32, 32), (batch_size)
+            # Forward pass. input: (batch_size, 3, 32, 32), output: (batch_size, 10)
+            pred = model(images)
+            pred_lbl = np.argmax(pred, axis=1).item()
+            predictions.append(pred_lbl)
         ######################### TODO End ##########################
 
     test_time = time.time() - test_start_time

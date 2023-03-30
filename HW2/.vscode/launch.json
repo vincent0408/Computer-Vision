@@ -40,16 +40,30 @@
             "cwd": "${workspaceFolder}/p2/"
         },
         {
-            "name": "Main2",
+            "name": "p2inference",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/part2/main.py",
+            "program": "${workspaceFolder}/p2/p2_inference.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "cwd": "${workspaceFolder}/part2/",
+            "cwd": "${workspaceFolder}/p2/",
             "args": [
-                "--image_path", "./testdata/1.png",
-                "--setting_path", "./testdata/1_setting.txt",
+                "--test_datadir", "../hw2_data/p2_data/val",
+                "--model_type" , "resnet18",
+                "--output_path", "./output/pred.csv",
+            ],
+        },
+        {
+            "name": "p2eval",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/p2/p2_eval.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/p2/",
+            "args": [
+                "--csv_path", "./output/pred.csv",
+                "--annos_path" , "../hw2_data/p2_data/val/annotations.json",
             ],
         }
     ],

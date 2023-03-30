@@ -11,45 +11,38 @@ class MyNet(nn.Module):
         # Define your CNN model architecture. Note that the first      #
         # input channel is 3, and the output dimension is 10 (class).  #
         ################################################################
-        # ref: https://www.analyticsvidhya.com/blog/2021/09/convolutional-neural-network-pytorch-implementation-on-cifar10-dataset/
-        self.network = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
+        self.nnet = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=20, kernel_size=(5, 5)),
             nn.ReLU(),
-            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),
+            # initialize second set of CONV => RELU => POOL layers
+            nn.Conv2d(in_channels=20, out_channels=50, kernel_size=(5, 5)),
             nn.ReLU(),
-            nn.MaxPool2d(2, 2), # output: 64 x 16 x 16
-            nn.BatchNorm2d(64),
-
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),
+            nn.Flatten(),
+            # initialize first (and only) set of FC => RELU layers
+            nn.Linear(in_features=1250, out_features=500),
             nn.ReLU(),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2), # output: 128 x 8 x 8
-            nn.BatchNorm2d(128),
-
-            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2), # output: 256 x 4 x 4
-            nn.BatchNorm2d(256),
-
-            nn.Flatten(), 
-            nn.Linear(256*4*4, 1024),
-            nn.ReLU(),
-            nn.Linear(1024, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10))
+            # initialize our softmax classifier
+            nn.Linear(in_features=500, out_features=10),
+            nn.LogSoftmax(dim=1)
+        )
 
     def forward(self, x):
-
         ##########################################
         # TODO:                                  #
         # Define the forward path of your model. #
         ##########################################
+        # pass the input through our first set of CONV => RELU =>
+		# POOL layers
+        # pass the output from the previous layer through the second
+        # set of CONV => RELU => POOL layers
+        # flatten the output from the previous layer and pass it
+        # through our only set of FC => RELU layers
+        output = self.nnet(x)
+        # return the output predictions
+        return output
 
-        return self.network(x)
-    
 class ResNet18(nn.Module):
     def __init__(self):
         super(ResNet18, self).__init__()
