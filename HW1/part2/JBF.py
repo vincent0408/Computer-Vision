@@ -14,7 +14,7 @@ class Joint_bilateral_filter(object):
         BORDER_TYPE = cv2.BORDER_REFLECT
         padded_img = cv2.copyMakeBorder(img, pad_w, pad_w, pad_w, pad_w, BORDER_TYPE).astype(np.int32)
         padded_guidance = cv2.copyMakeBorder(guidance, pad_w, pad_w, pad_w, pad_w, BORDER_TYPE).astype(np.int32)
-        output, grid_length, isRGB = np.zeros(img.shape).astype(np.float64), np.arange(-pad_w, pad_w + 1), len(padded_guidance.shape) == 3
+        output, grid_length, isRGB = np.empty(img.shape), np.arange(-pad_w, pad_w + 1), len(padded_guidance.shape) == 3
         x_s, y_s = np.meshgrid(grid_length, grid_length)        
         spatial_kernel = -0.5 * (x_s ** 2 + y_s ** 2) * sigma_s ** -2
         lut_r = np.arange(256) ** 2 * (255 * sigma_r) ** -2 * -0.5
@@ -83,7 +83,6 @@ class Joint_bilateral_filter(object):
         # Method 4: space/range kernel lookup table + np.roll(shift image instead of window, only window_size ** 2
         # iterations needed) + Method 2
         # ref: https://github.com/soham2109/CS-663-Assignments/blob/33609aa8cebddb0c780c5452849d6ddab405d2f1/CS-663-Project/flashNoFlash.py#L61
-
 
         padded_output  = np.zeros(padded_img.shape).astype(np.float64)
         if(isRGB):

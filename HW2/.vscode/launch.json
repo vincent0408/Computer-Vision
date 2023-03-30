@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [{
+            "name": "p1pytiny",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/p1/p1.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--feature", "tiny_image", "--classifier", "nearest_neighbor",
+                "--dataset_dir", "../hw2_data/p1_data/",
+            ],
+            "cwd": "${workspaceFolder}/p1/"
+        },
+        {
+            "name": "p1pysift",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/p1/p1.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--feature", "bag_of_sift", "--classifier", "nearest_neighbor",
+                "--dataset_dir", "../hw2_data/p1_data/",
+            ],
+            "cwd": "${workspaceFolder}/p1/"
+        },
+        {
+            "name": "p2train",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/p2/p2_train.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [],
+            "cwd": "${workspaceFolder}/p2/"
+        },
+        {
+            "name": "Main2",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/part2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/part2/",
+            "args": [
+                "--image_path", "./testdata/1.png",
+                "--setting_path", "./testdata/1_setting.txt",
+            ],
+        }
+    ],
+}
