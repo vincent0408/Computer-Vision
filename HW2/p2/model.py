@@ -72,5 +72,7 @@ class Identity(nn.Module):
         return x
     
 if __name__ == '__main__':
-    model = ResNet18()
-    print(model)
+    # model = ResNet18()
+    # print(model)
+    print(ResNet18())
+    print(MyNet())
