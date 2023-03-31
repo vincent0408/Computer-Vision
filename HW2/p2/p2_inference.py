@@ -62,7 +62,7 @@ def main():
             images= data['images'].to(device) # (batch_size, 3, 32, 32), (batch_size)
             # Forward pass. input: (batch_size, 3, 32, 32), output: (batch_size, 10)
             pred = model(images)
-            pred_lbl = np.argmax(pred, axis=1).item()
+            pred_lbl = np.argmax(pred.cpu(), axis=1).item()
             predictions.append(pred_lbl)
         ######################### TODO End ##########################
 

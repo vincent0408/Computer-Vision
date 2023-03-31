@@ -188,7 +188,6 @@ def main():
     else:
         optimizer = torch.optim.SGD(model.parameters(), lr=cfg.lr, momentum=0.9, weight_decay=1e-6)
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=cfg.milestones, gamma=0.1)
-    
     ##### TRAINING & VALIDATION #####
     ##### TODO: check train() in this file #####
     train(model          = model,

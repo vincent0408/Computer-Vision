@@ -11,21 +11,21 @@ class MyNet(nn.Module):
         # Define your CNN model architecture. Note that the first      #
         # input channel is 3, and the output dimension is 10 (class).  #
         ################################################################
-        self.nnet = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=20, kernel_size=(5, 5)),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),
-            # initialize second set of CONV => RELU => POOL layers
-            nn.Conv2d(in_channels=20, out_channels=50, kernel_size=(5, 5)),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2)),
-            nn.Flatten(),
-            # initialize first (and only) set of FC => RELU layers
-            nn.Linear(in_features=1250, out_features=500),
-            nn.ReLU(),
-            # initialize our softmax classifier
-            nn.Linear(in_features=500, out_features=10),
-            nn.LogSoftmax(dim=1)
+
+        layers = []
+        in_channels = 3
+        for i in [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M']:
+            if i == 'M':
+                layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+            else:
+                layers.extend([nn.Conv2d(in_channels, i, kernel_size=3, padding=1),
+                           nn.BatchNorm2d(i),
+                           nn.ReLU(inplace=True)])
+                in_channels = i
+        layers.append(nn.AvgPool2d(kernel_size=1, stride=1))
+        self.nnet = nn.Sequential(*layers,
+        nn.Flatten(),
+        nn.Linear(512, 10)
         )
 
     def forward(self, x):
@@ -33,14 +33,7 @@ class MyNet(nn.Module):
         # TODO:                                  #
         # Define the forward path of your model. #
         ##########################################
-        # pass the input through our first set of CONV => RELU =>
-		# POOL layers
-        # pass the output from the previous layer through the second
-        # set of CONV => RELU => POOL layers
-        # flatten the output from the previous layer and pass it
-        # through our only set of FC => RELU layers
         output = self.nnet(x)
-        # return the output predictions
         return output
 
 class ResNet18(nn.Module):
