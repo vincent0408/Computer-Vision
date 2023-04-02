@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob
 from sklearn.metrics import confusion_matrix
-
 from utils import get_tiny_images
 from utils import build_vocabulary, get_bags_of_sifts
 from utils import nearest_neighbor_classify
