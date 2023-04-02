@@ -22,8 +22,8 @@ class MyNet(nn.Module):
                            nn.BatchNorm2d(i),
                            nn.ReLU(inplace=True)])
                 in_channels = i
-        layers.append(nn.AvgPool2d(kernel_size=1, stride=1))
         self.nnet = nn.Sequential(*layers,
+        nn.AvgPool2d(kernel_size=1, stride=1),
         nn.Flatten(),
         nn.Linear(512, 10)
         )

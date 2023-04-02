@@ -127,9 +127,9 @@ def plot_confusion_mtx(test_labels_ids, pred_cats, feature_type):
     plt.colorbar()
     plt.xticks(np.arange(len(ABBR_CAT)), ABBR_CAT, rotation=45)
     plt.yticks(np.arange(len(ABBR_CAT)), ABBR_CAT)
-    plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+    plt.tight_layout()
     plt.savefig(f'{feature_type}.png')
 
 if __name__ == '__main__':

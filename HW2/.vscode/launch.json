@@ -49,7 +49,7 @@
             "cwd": "${workspaceFolder}/p2/",
             "args": [
                 "--test_datadir", "../hw2_data/p2_data/val",
-                "--model_type", "mynet",
+                "--model_type", "resnet18",
                 "--output_path", "./output/pred.csv",
             ],
         },

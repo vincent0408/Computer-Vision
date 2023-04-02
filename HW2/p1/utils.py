@@ -117,7 +117,7 @@ def build_vocabulary(img_paths, vocab_size):
     
     for ip in tqdm(img_paths):
         img = cv2.imread(ip, 0).astype(np.float64)
-        _, descriptors = dsift(img, step=[1, 1], fast=True)
+        _, descriptors = dsift(img, step=[2, 2], fast=True)
         # np.random.shuffle(np.array(descriptors))
         # descriptors = descriptors[:len(descriptors) // 4]
         features.extend(descriptors)
