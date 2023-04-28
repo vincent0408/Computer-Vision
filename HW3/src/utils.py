@@ -19,8 +19,15 @@ def solve_homography(u, v):
         print('At least 4 points should be given')
 
     # TODO: 1.forming A
+    A = []
+    for i in range(N):
+        A.append([u[i][0], u[i][1], 1, 0, 0, 0, -u[i][0] * v[i][0], -u[i][1] * v[i][1], -v[i][0]])
+        A.append([0, 0, 0, u[i][0], u[i][1], 1, -u[i][0] * v[i][0], -u[i][1] * v[i][1], -v[i][1]])
+                 
 
     # TODO: 2.solve H with A
+    res = np.linalg.svd(A, full_matrices=True)
+    H = np.reshape(res[2][-1], (3,3))
 
     return H
 
@@ -63,8 +70,9 @@ def warping(src, dst, H, ymin, ymax, xmin, xmax, direction='b'):
     H_inv = np.linalg.inv(H)
 
     # TODO: 1.meshgrid the (x,y) coordinate pairs
-
+    x, y = np.meshgrid(range(xmin,xmax),range(ymin,ymax))
     # TODO: 2.reshape the destination pixels as N x 3 homogeneous coordinate
+    before = np.array([x, y, np.ones(x.shape)]).reshape((3, -1))
 
     if direction == 'b':
         # TODO: 3.apply H_inv to the destination pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)
@@ -79,13 +87,15 @@ def warping(src, dst, H, ymin, ymax, xmin, xmax, direction='b'):
 
     elif direction == 'f':
         # TODO: 3.apply H to the source pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)
+        after = np.matmul(H, before)
+        after = np.rint(after / after[2])
 
         # TODO: 4.calculate the mask of the transformed coordinate (should not exceed the boundaries of destination image)
-
+        mask = np.array([np.logical_and(after[0] >= 0, after[0] < w_dst), np.logical_and(after[1] >= 0, after[1] < h_dst), np.full(after.shape[1], True)])
         # TODO: 5.filter the valid coordinates using previous obtained mask
-
+        after = (after * mask).astype(int)
+        # after = np.reshape(after, (3, xmax-xmin, ymax-ymin)).transpose(2, 1, 0)
         # TODO: 6. assign to destination image using advanced array indicing
-
-        pass
+        dst[np.reshape(after[1], (ymax-ymin, xmax-xmin)), np.reshape(after[0], (ymax-ymin, xmax-xmin))] = src
 
     return dst
