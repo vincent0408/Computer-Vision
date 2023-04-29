@@ -3,7 +3,6 @@ import cv2
 import random
 from tqdm import tqdm
 from utils import solve_homography, warping
-import matplotlib.pyplot as plt
 
 random.seed(999)
 
@@ -20,7 +19,6 @@ def panorama(imgs):
     dst = np.zeros((h_max, w_max, imgs[0].shape[2]), dtype=np.uint8)
     dst[:imgs[0].shape[0], :imgs[0].shape[1]] = imgs[0]
     last_best_H = np.eye(3)
-    out = None
 
     # for all images to be stitched:
     for idx in tqdm(range(len(imgs)-1)):
@@ -35,34 +33,33 @@ def panorama(imgs):
         # create BFMatcher object
         bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         # Match descriptors.
-        matches = bf.match(des1,des2)
+        matches = bf.match(des1,des2)[:100]
         # Sort them in the order of their distance.
-        max_dist_cut = 100
         matches = sorted(matches, key = lambda x:x.distance)
-        query_data = np.vstack((np.array([kp1[x.queryIdx].pt for x in matches]).T, np.ones(len(matches))[None, :]))
-        train_data = np.vstack((np.array([kp2[x.trainIdx].pt for x in matches]).T, np.ones(len(matches))[None, :]))
+
+        dst_data = np.vstack((np.array([kp1[x.queryIdx].pt for x in matches]).T, np.ones(len(matches))[None, :]))
+        src_data = np.vstack((np.array([kp2[x.trainIdx].pt for x in matches]).T, np.ones(len(matches))[None, :]))
         N = 1000
         inliers = 0
         # TODO: 2. apply RANSAC to choose best H
         for i in range(N):
-            random_idx = random.sample(range(len(matches)), 13)
-            query_corners = query_data[:,random_idx][:2].T
-            train_corners = train_data[:,random_idx][:2].T
-            H = solve_homography(train_corners, query_corners)
-            predicted_query_data = np.matmul(H, train_data)
-            predicted_query_data = predicted_query_data / predicted_query_data[2]
-            error = (predicted_query_data - query_data)[:2]
+            random_idx = random.sample(range(len(matches)), 4)
+            src_corners = src_data[:,random_idx][:2].T
+            dst_corners = dst_data[:,random_idx][:2].T
+            H = solve_homography(src_corners, dst_corners)
+            predicted_dst_data = np.matmul(H, src_data)
+            predicted_dst_data = predicted_dst_data / predicted_dst_data[2]
+            error = (predicted_dst_data - dst_data)[:2]
             error_norm = np.linalg.norm(error, 1, axis=0)
-            predicted_inliers = len(np.nonzero(error_norm < 4))
+            predicted_inliers = np.nonzero(error_norm < 10)[0].shape[0]
             if(predicted_inliers > inliers):
                 inliers = predicted_inliers
                 best_H = H
 
-
         # TODO: 3. chain the homographies
-        last_best_H = np.matmul(best_H, last_best_H)
+        last_best_H = np.matmul(last_best_H, best_H)
         # TODO: 4. apply warping
-        dst = warping(im1, dst, last_best_H, 0, h_max, 0, w_max, direction='b')
+        dst = warping(im2, dst, last_best_H, 0, h_max, 0, w_max, direction='b')
 
     return dst
 
