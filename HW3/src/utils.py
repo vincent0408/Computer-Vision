@@ -10,7 +10,6 @@ def solve_homography(u, v):
     :return:
     """
     N = u.shape[0]
-    H = None
 
     if v.shape[0] is not N:
         print('u and v should have the same size')
@@ -21,8 +20,8 @@ def solve_homography(u, v):
     # TODO: 1.forming A
     A = []
     for i in range(N):
-        A.append([u[i][0], u[i][1], 1, 0, 0, 0, -u[i][0] * v[i][0], -u[i][1] * v[i][1], -v[i][0]])
-        A.append([0, 0, 0, u[i][0], u[i][1], 1, -u[i][0] * v[i][0], -u[i][1] * v[i][1], -v[i][1]])
+        A.append([u[i][0], u[i][1], 1, 0, 0, 0, -u[i][0] * v[i][0], -u[i][1] * v[i][0], -v[i][0]])
+        A.append([0, 0, 0, u[i][0], u[i][1], 1, -u[i][0] * v[i][1], -u[i][1] * v[i][1], -v[i][1]])
                  
 
     # TODO: 2.solve H with A
@@ -76,14 +75,17 @@ def warping(src, dst, H, ymin, ymax, xmin, xmax, direction='b'):
 
     if direction == 'b':
         # TODO: 3.apply H_inv to the destination pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)
+        after = np.matmul(H_inv, before)
+        after = np.rint(after / after[2])
 
         # TODO: 4.calculate the mask of the transformed coordinate (should not exceed the boundaries of source image)
-
+        mask = np.array([np.logical_and(after[0] >= 0, after[0] < w_src), np.logical_and(after[1] >= 0, after[1] < h_src), np.full(after.shape[1], True)])
         # TODO: 5.sample the source image with the masked and reshaped transformed coordinates
-
+        after = (after * mask).astype(int)
+        sample = src[np.reshape(after[1], (ymax-ymin, xmax-xmin)), np.reshape(after[0], (ymax-ymin, xmax-xmin))]
         # TODO: 6. assign to destination image with proper masking
-
-        pass
+        mask_reshape = np.reshape(mask, (3, xmax-xmin, ymax-ymin)).transpose(2, 1, 0)
+        dst[ymin:ymax, xmin:xmax][mask_reshape] = sample[mask_reshape]
 
     elif direction == 'f':
         # TODO: 3.apply H to the source pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)

@@ -12,6 +12,33 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "cwd": "${workspaceFolder}/src/"
+        },
+        {
+            "name": "part2",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/part2.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src/"
+        },
+        {
+            "name": "part3",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/part3.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src/"
+        },
+        {
+            "name": "part4",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/part4.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src/"
         }
     ]
 }
