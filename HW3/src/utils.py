@@ -76,16 +76,16 @@ def warping(src, dst, H, ymin, ymax, xmin, xmax, direction='b'):
     if direction == 'b':
         # TODO: 3.apply H_inv to the destination pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)
         after = np.matmul(H_inv, before)
-        after = np.reshape(np.rint(after / after[2]), (3, xmax-xmin, ymax-ymin)).transpose(2, 1, 0)
-
+        after_x, after_y = (after[:2,] / after[2]).astype(int)
         # TODO: 4.calculate the mask of the transformed coordinate (should not exceed the boundaries of source image)
-        mask = np.array([np.logical_and(after[:, :, 0] >= 0, after[:, :, 0] < w_src), np.logical_and(after[:, :, 1] >= 0, after[:, :, 1] < h_src), np.full((after.shape[0], after.shape[1]), True)]).transpose(1, 2, 0)
+        mask = np.logical_and(np.logical_and(after_x >= 0, after_x < w_src), np.logical_and(after_y >= 0, after_y < h_src))
+        after_x, after_y = after_x[mask], after_y[mask]
         # TODO: 5.sample the source image with the masked and reshaped transformed coordinates
-        after = after[mask]
-        sample = src[np.reshape(after[1], (ymax-ymin, xmax-xmin)), np.reshape(after[0], (ymax-ymin, xmax-xmin))]
+        sample = src[after_y, after_x]
         # TODO: 6. assign to destination image with proper masking
-        mask_reshape = np.reshape(mask, (3, xmax-xmin, ymax-ymin)).transpose(2, 1, 0)
-        dst[ymin:ymax, xmin:xmax][mask_reshape] = sample[mask_reshape]
+        dst[ymin:ymax, xmin:xmax][np.reshape(mask, (ymax-ymin, xmax-xmin))] = sample
+
+
 
     elif direction == 'f':
         # TODO: 3.apply H to the source pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)
