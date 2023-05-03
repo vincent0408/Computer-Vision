@@ -23,7 +23,6 @@ def solve_homography(u, v):
         A.append([u[i][0], u[i][1], 1, 0, 0, 0, -u[i][0] * v[i][0], -u[i][1] * v[i][0], -v[i][0]])
         A.append([0, 0, 0, u[i][0], u[i][1], 1, -u[i][0] * v[i][1], -u[i][1] * v[i][1], -v[i][1]])
                  
-
     # TODO: 2.solve H with A
     res = np.linalg.svd(A, full_matrices=True)
     H = np.reshape(res[2][-1], (3,3))
@@ -63,7 +62,6 @@ def warping(src, dst, H, ymin, ymax, xmin, xmax, direction='b'):
     :param direction: indicates backward warping or forward warping
     :return: destination output image
     """
-
     h_src, w_src, ch = src.shape
     h_dst, w_dst, ch = dst.shape
     H_inv = np.linalg.inv(H)
@@ -84,8 +82,6 @@ def warping(src, dst, H, ymin, ymax, xmin, xmax, direction='b'):
         sample = src[after_y, after_x]
         # TODO: 6. assign to destination image with proper masking
         dst[ymin:ymax, xmin:xmax][np.reshape(mask, (ymax-ymin, xmax-xmin))] = sample
-
-
 
     elif direction == 'f':
         # TODO: 3.apply H to the source pixels and retrieve (u,v) pixels, then reshape to (ymax-ymin),(xmax-xmin)
