@@ -5,21 +5,44 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "eval",
+            "name": "Tsukuba",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/eval.py",
+            "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "cwd": "${workspaceFolder}/"
+            "cwd": "${workspaceFolder}/",
+            "args": ["--image", "Tsukuba"]
+        },  
+        {
+            "name": "Venus",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/",
+            "args": ["--image", "Venus"]
+        },  
+        {
+            "name": "Teddy",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/",
+            "args": ["--image", "Teddy"]
         },
         {
-            "name": "computeDisp",
+            "name": "Cones",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/computeDisp.py",
+            "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "cwd": "${workspaceFolder}/"
-        },    ]
+            "cwd": "${workspaceFolder}/",
+            "args": ["--image", "Cones"]
+        },    
+    ]
 }
